@@ -1,0 +1,17 @@
+{
+  "name": "ALDRICH VAULT - Personal Finance",
+  "short_name": "Aldrich Vault",
+  "description": "Personal Financial Command Center bertema Naruto & Sasuke",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#090A0F",
+  "theme_color": "#FF6B00",
+  "icons": [
+    {
+      "src": "https://flaticon.com",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

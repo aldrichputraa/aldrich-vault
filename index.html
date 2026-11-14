@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ALDRICH VAULT — Personal Financial Command Center.">
+  <meta name="theme-color" content="#FAF7F2">
+  <title>ALDRICH VAULT — Personal Financial Command Center</title>
+  <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#FF6B00">
+<link rel="apple-touch-icon" href="https://flaticon.com">
+
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <main class="app-container">
+    <header class="header">
+      <a class="brand" href="#" aria-label="ALDRICH VAULT beranda">
+        <span class="brand-icon">A</span>
+        <span class="brand-copy">
+          <strong>ALDRICH VAULT</strong>
+          <small>Personal Financial Command Center</small>
+        </span>
+      </a>
+
+      <div class="header-actions">
+        <div class="header-date">
+          <span class="status-dot"></span>
+          <span>PRIVATE FINANCE SYSTEM</span>
+        </div>
+
+        <button class="utility-launch-button" id="utilityLaunchButton" type="button">✦ Utility</button>
+        <button class="pin-setup-button" id="pinSetupButton" type="button">⌑ PIN Lock</button>
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Ganti tema">
+          <span id="themeIcon" aria-hidden="true">☾</span>
+          <span id="themeText">Dark Mode</span>
+        </button>
+      </div>
+    </header>
+
+    <section class="welcome-section">
+      <div>
+        <p class="section-label">PERSONAL FINANCIAL COMMAND CENTER</p>
+        <p class="greeting-text" id="greetingText">Selamat datang, Aldrich.</p>
+        <h1>Take control of your <span>financial future.</span></h1>
+        <p class="welcome-description">
+          Satu ruang kendali untuk memantau arus kas, mengatur anggaran,
+          dan membangun target keuangan dengan lebih terarah.
+        </p>
+      </div>
+    </section>
+
+    <section class="dashboard-section" aria-labelledby="dashboardTitle">
+      <div class="section-heading">
+        <div>
+          <p class="section-label">RINGKASAN KEUANGAN</p>
+          <h2 id="dashboardTitle">Dashboard Saldo</h2>
+        </div>
+      </div>
+
+      <div class="summary-grid">
+        <article class="summary-card balance-card">
+          <div class="card-top">
+            <span class="card-label">Total Saldo</span>
+            <span class="card-icon balance-icon">◈</span>
+          </div>
+
+          <div class="balance-value-row">
+            <p class="card-value" id="totalBalance">Rp0</p>
+            <button
+              class="privacy-toggle"
+              id="privacyToggle"
+              type="button"
+              aria-label="Sembunyikan nominal saldo"
+              aria-pressed="false"
+              title="Sembunyikan nominal"
+            >
+              <span id="privacyIcon" aria-hidden="true">◉</span>
+            </button>
+          </div>
+
+          <p class="card-description">Gabungan seluruh dompet</p>
+        </article>
+
+        <article class="summary-card">
+          <div class="card-top">
+            <span class="card-label">Total Pemasukan</span>
+            <span class="card-icon income-icon">↗</span>
+          </div>
+          <p class="card-value income-text" id="totalIncome">Rp0</p>
+          <p class="card-description">Akumulasi pemasukan</p>
+        </article>
+
+        <article class="summary-card">
+          <div class="card-top">
+            <span class="card-label">Total Pengeluaran</span>
+            <span class="card-icon expense-icon">↘</span>
+          </div>
+          <p class="card-value expense-text" id="totalExpense">Rp0</p>
+          <p class="card-description">Akumulasi pengeluaran</p>
+        </article>
+      </div>
+
+      <div class="insight-grid">
+        <article class="insight-card safe-card">
+          <div class="insight-card-top">
+            <span class="insight-kicker">AVAILABLE FUNDS</span>
+            <span class="insight-symbol">⌁</span>
+          </div>
+          <p class="insight-title">Safe-to-Spend</p>
+          <strong class="insight-value" id="safeToSpend">Rp0</strong>
+          <p class="insight-description" id="safeToSpendNote">
+            Saldo yang tersedia setelah alokasi awal target tabungan.
+          </p>
+        </article>
+
+        <article class="insight-card smart-card">
+          <div class="insight-card-top">
+            <span class="insight-kicker">MONTHLY ANALYSIS</span>
+            <span class="insight-symbol">✳</span>
+          </div>
+          <p class="insight-title">Smart Insight</p>
+          <strong class="insight-value insight-comparison" id="smartInsightValue">
+            Belum ada perbandingan
+          </strong>
+          <p class="insight-description" id="smartInsightText">
+            Catat pengeluaran untuk melihat perbandingan dengan bulan lalu.
+          </p>
+        </article>
+      </div>
+
+      <div class="wallet-heading">
+        <div>
+          <p class="section-label">PEMBAGIAN DANA</p>
+          <h3>Saldo per Dompet</h3>
+        </div>
+        <span class="wallet-caption">Saldo diperbarui otomatis</span>
+      </div>
+
+      <div class="wallet-grid" id="walletGrid"></div>
+    </section>
+
+    <section class="ultimate-grid" aria-label="Analisis dan peringkat keuangan">
+      <article class="panel heatmap-panel">
+        <div class="panel-header">
+          <div>
+            <p class="section-label">ACTIVITY TRACKER</p>
+            <h2>Spending Heatmap</h2>
+            <p class="panel-subtitle">Aktivitas pengeluaran 30 hari terakhir.</p>
+          </div>
+          <span class="panel-icon">▦</span>
+        </div>
+        <div class="heatmap-month-label" id="heatmapRangeLabel">30 hari terakhir</div>
+        <div class="heatmap-grid" id="spendingHeatmap" aria-label="Heatmap pengeluaran harian 30 hari terakhir"></div>
+        <div class="heatmap-legend">
+          <span>Lebih sedikit</span><span class="heatmap-level level-0"></span>
+          <span class="heatmap-level level-1"></span>
+          <span class="heatmap-level level-2"></span>
+          <span class="heatmap-level level-3"></span>
+          <span class="heatmap-level level-4"></span>
+          <span>Lebih banyak</span>
+        </div>
+      </article>
+
+      <article class="panel rank-panel">
+        <div class="panel-header">
+          <div>
+            <p class="section-label">SHINOBI FINANCE RANK</p>
+            <h2>Shinobi Rank Score</h2>
+          </div>
+          <span class="panel-icon">✧</span>
+        </div>
+        <div class="rank-score-row">
+          <strong id="rankScore">0%</strong>
+          <span class="rank-badge" id="rankName">Genin</span>
+        </div>
+        <div class="progress-track rank-track" role="progressbar" id="rankProgressTrack" aria-label="Shinobi Rank Score" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+          <div class="progress-fill rank-progress" id="rankProgress"></div>
+        </div>
+        <div class="rank-stats">
+          <div><span>Saving Ratio</span><strong id="savingRatio">0%</strong></div>
+          <div><span>Pengeluaran bulan ini</span><strong id="rankMonthExpense">Rp0</strong></div>
+        </div>
+        <p class="rank-description" id="rankDescription">Mulai catat aktivitas untuk membangun peringkatmu.</p>
+        <button class="small-outline-button copy-summary-button" id="copySummaryButton" type="button">⧉ Salin Ringkasan</button>
+      </article>
+    </section>
+
+    <section class="analysis-grid">
+      <article class="panel budget-panel">
+        <div class="panel-header">
+          <div>
+            <p class="section-label">KONTROL PENGELUARAN</p>
+            <h2>Batas Pengeluaran Bulan Ini</h2>
+          </div>
+          <span class="panel-icon">◎</span>
+        </div>
+
+        <div class="budget-summary">
+          <div>
+            <span class="muted-label">Terpakai bulan ini</span>
+            <strong id="budgetSpent">Rp0</strong>
+          </div>
+          <div class="budget-limit-display">
+            <span class="muted-label">Batas anggaran</span>
+            <strong id="budgetLimitDisplay">Belum diatur</strong>
+          </div>
+        </div>
+
+        <div
+          class="progress-track budget-track"
+          id="budgetProgressTrack"
+          role="progressbar"
+          aria-label="Pemakaian anggaran"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow="0"
+        >
+          <div class="progress-fill budget-progress" id="budgetProgress"></div>
+        </div>
+
+        <div class="budget-status-row">
+          <span id="budgetPercentage">0% terpakai</span>
+          <span id="budgetRemaining">Atur anggaran untuk memulai</span>
+        </div>
+
+        <form id="budgetForm" class="budget-form">
+          <label for="budgetLimit">Atur batas pengeluaran bulanan</label>
+          <div class="inline-input-row">
+            <div class="amount-input-wrapper compact-amount">
+              <span class="currency-prefix">Rp</span>
+              <input
+                id="budgetLimit"
+                type="text"
+                inputmode="numeric"
+                placeholder="Contoh: 2.000.000"
+                autocomplete="off"
+              >
+            </div>
+            <button class="primary-button" type="submit">Simpan Anggaran</button>
+          </div>
+        </form>
+      </article>
+
+      <article class="panel chart-panel">
+        <div class="panel-header">
+          <div>
+            <p class="section-label">ANALISIS PENGELUARAN</p>
+            <h2>Komposisi Kategori</h2>
+          </div>
+          <span class="panel-icon">◔</span>
+        </div>
+
+        <p class="chart-caption" id="chartCaption">
+          Pengeluaran bulan ini berdasarkan kategori.
+        </p>
+
+        <div class="chart-wrap">
+          <canvas
+            id="expenseChart"
+            aria-label="Donut chart komposisi pengeluaran"
+            role="img"
+          ></canvas>
+        </div>
+
+        <div class="chart-legend" id="chartLegend"></div>
+      </article>
+    </section>
+
+    <section class="panel goals-panel">
+      <div class="panel-header goals-heading">
+        <div>
+          <p class="section-label">RENCANA MASA DEPAN</p>
+          <h2>Target Tabungan</h2>
+          <p class="panel-subtitle">
+            Buat tujuan dan sisihkan uang dari dompetmu secara bertahap.
+          </p>
+        </div>
+
+        <button class="primary-button" id="createGoalButton" type="button">
+          + Buat Target
+        </button>
+      </div>
+
+      <div class="goal-grid" id="goalList" aria-live="polite"></div>
+    </section>
+
+    <section class="content-grid">
+      <section class="panel form-panel" aria-labelledby="formTitle">
+        <div class="panel-header">
+          <div>
+            <p class="section-label">CATAT AKTIVITAS</p>
+            <h2 id="formTitle">Transaksi Baru</h2>
+          </div>
+          <span class="panel-icon">＋</span>
+        </div>
+
+        <section class="quick-add-section">
+          <div class="quick-add-heading">
+            <div>
+              <h3>Quick Add</h3>
+              <p>Pilih template untuk mengisi form lebih cepat.</p>
+            </div>
+            <button class="small-outline-button" id="createTemplateButton" type="button">
+              + Buat Template
+            </button>
+          </div>
+
+          <div class="quick-template-list" id="quickTemplateList"></div>
+        </section>
+
+        <form id="transactionForm" novalidate>
+          <div class="form-group">
+            <label for="type">Jenis Aktivitas</label>
+            <select id="type" name="type">
+              <option value="expense">Pengeluaran</option>
+              <option value="income">Pemasukan</option>
+              <option value="transfer">Transfer Antar Dompet</option>
+            </select>
+          </div>
+
+          <div class="form-group" id="descriptionGroup">
+            <label for="description">Keterangan</label>
+            <input
+              type="text"
+              id="description"
+              name="description"
+              placeholder="Contoh: Makan siang"
+              maxlength="80"
+              autocomplete="off"
+            >
+          </div>
+
+          <div class="form-group" id="categoryGroup">
+            <label for="category">Kategori</label>
+            <select id="category" name="category">
+              <option value="Makan & Minum">Makan & Minum</option>
+              <option value="Transportasi">Transportasi</option>
+              <option value="Tagihan">Tagihan</option>
+              <option value="Belanja">Belanja</option>
+              <option value="Gaji">Gaji</option>
+              <option value="Pendidikan">Pendidikan</option>
+              <option value="Hiburan">Hiburan</option>
+              <option value="Kesehatan">Kesehatan</option>
+              <option value="Lainnya">Lainnya</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="amount">Nominal (Rupiah)</label>
+            <div class="amount-input-wrapper">
+              <span class="currency-prefix">Rp</span>
+              <input
+                type="text"
+                id="amount"
+                name="amount"
+                placeholder="0"
+                inputmode="numeric"
+                autocomplete="off"
+              >
+            </div>
+            <small class="field-hint">
+              Nominal otomatis menggunakan pemisah ribuan.
+            </small>
+          </div>
+
+          <div class="form-group">
+            <label for="account">Sumber Dana</label>
+            <select id="account" name="account">
+              <option value="cash">Tunai (Cash)</option>
+              <option value="bank">Rekening Bank</option>
+              <option value="ewallet">E-Wallet</option>
+            </select>
+          </div>
+
+          <div class="form-group transfer-only" id="destinationGroup" hidden>
+            <label for="destinationAccount">Dompet Tujuan</label>
+            <select id="destinationAccount" name="destinationAccount">
+              <option value="bank">Rekening Bank</option>
+              <option value="ewallet">E-Wallet</option>
+              <option value="cash">Tunai (Cash)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="date">Tanggal</label>
+            <input type="date" id="date" name="date">
+          </div>
+
+          <div class="form-group">
+            <label for="notes">
+              Catatan Detail <span class="optional-label">(Opsional)</span>
+            </label>
+            <textarea
+              id="notes"
+              name="notes"
+              rows="3"
+              maxlength="250"
+              placeholder="Tambahkan rincian jika diperlukan..."
+            ></textarea>
+          </div>
+
+          <div class="edit-notice" id="editNotice" hidden>
+            Kamu sedang mengedit data transaksi.
+            <button id="cancelEditButton" class="cancel-edit-button" type="button">
+              Batalkan edit
+            </button>
+          </div>
+
+          <div class="form-actions">
+            <button class="submit-button" id="submitButton" type="submit">
+              <span id="submitIcon">＋</span>
+              <span id="submitText">Simpan Transaksi</span>
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <section class="panel history-panel" aria-labelledby="historyTitle">
+        <div class="panel-header history-heading">
+          <div>
+            <p class="section-label">RIWAYAT KEUANGAN</p>
+            <h2 id="historyTitle">Aktivitas Terbaru</h2>
+          </div>
+          <span class="transaction-count" id="transactionCount">0 aktivitas</span>
+        </div>
+
+        <div class="search-container">
+          <span class="search-icon" aria-hidden="true">⌕</span>
+          <input
+            type="search"
+            id="searchInput"
+            placeholder="Cari keterangan, kategori, atau catatan..."
+            autocomplete="off"
+          >
+          <button
+            id="clearSearchButton"
+            class="clear-search-button"
+            type="button"
+            aria-label="Hapus pencarian"
+            hidden
+          >×</button>
+        </div>
+
+        <div class="filter-section">
+          <div class="filter-container" role="group" aria-label="Filter jenis aktivitas">
+            <button class="filter-button active" type="button" data-filter="all">Semua</button>
+            <button class="filter-button" type="button" data-filter="income">Pemasukan</button>
+            <button class="filter-button" type="button" data-filter="expense">Pengeluaran</button>
+            <button class="filter-button" type="button" data-filter="transfer">Transfer</button>
+            <button class="filter-button" type="button" data-filter="saving">Nabung</button>
+          </div>
+
+          <select id="monthFilter" class="month-filter" aria-label="Filter bulan">
+            <option value="all">Semua Waktu</option>
+          </select>
+        </div>
+
+        <div class="transaction-list" id="transactionList" aria-live="polite"></div>
+
+        <div class="history-footer">
+          <p class="export-note">Ekspor data sesuai filter yang sedang aktif.</p>
+
+          <div class="history-actions">
+            <button class="export-button" id="exportButton" type="button">↓ Export CSV</button>
+            <button class="export-button" id="backupButton" type="button">↓ Backup JSON</button>
+            <button class="export-button" id="restoreButton" type="button">↑ Restore JSON</button>
+            <input type="file" id="restoreFile" accept=".json,application/json" hidden>
+            <button class="clear-button" id="clearAllButton" type="button">Hapus Semua</button>
+          </div>
+        </div>
+
+        <p class="backup-note">
+          Backup menyimpan seluruh data ALDRICH VAULT. Simpan file JSON di tempat yang aman.
+        </p>
+      </section>
+    </section>
+
+    <footer class="footer">
+      <p>
+        © <span id="currentYear"></span>
+        <strong>ALDRICH VAULT</strong> · Personal Financial Command Center
+      </p>
+      <p>Private by design · Data tersimpan di browser perangkat ini.</p>
+    </footer>
+  </main>
+
+  <dialog class="app-dialog" id="goalDialog">
+    <form id="goalForm" class="dialog-form">
+      <div class="dialog-header">
+        <div>
+          <p class="section-label">SAVINGS GOAL</p>
+          <h2 id="goalDialogTitle">Buat Target Tabungan</h2>
+        </div>
+        <button
+          class="dialog-close"
+          type="button"
+          data-close-dialog="goalDialog"
+          aria-label="Tutup"
+        >×</button>
+      </div>
+
+      <div class="form-group">
+        <label for="goalName">Nama Target</label>
+        <input id="goalName" type="text" maxlength="55" placeholder="Contoh: Laptop baru" required>
+      </div>
+
+      <div class="form-group">
+        <label for="goalTarget">Target Nominal</label>
+        <div class="amount-input-wrapper">
+          <span class="currency-prefix">Rp</span>
+          <input id="goalTarget" type="text" inputmode="numeric" placeholder="5.000.000" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="goalInitial">Nominal Terkumpul Saat Ini</label>
+        <div class="amount-input-wrapper">
+          <span class="currency-prefix">Rp</span>
+          <input id="goalInitial" type="text" inputmode="numeric" placeholder="0">
+        </div>
+        <small class="field-hint">
+          Saldo awal target ini hanya sebagai catatan progres, tidak memotong saldo dompet.
+        </small>
+      </div>
+
+      <div class="dialog-actions">
+        <button class="secondary-button" type="button" data-close-dialog="goalDialog">Batal</button>
+        <button class="primary-button" type="submit">Simpan Target</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="app-dialog" id="contributeDialog">
+    <form id="contributeForm" class="dialog-form">
+      <div class="dialog-header">
+        <div>
+          <p class="section-label">TAMBAH TABUNGAN</p>
+          <h2 id="contributeDialogTitle">Sisihkan Dana</h2>
+        </div>
+        <button
+          class="dialog-close"
+          type="button"
+          data-close-dialog="contributeDialog"
+          aria-label="Tutup"
+        >×</button>
+      </div>
+
+      <input id="contributeGoalId" type="hidden">
+
+      <div class="form-group">
+        <label for="contributeAmount">Nominal yang Ditabung</label>
+        <div class="amount-input-wrapper">
+          <span class="currency-prefix">Rp</span>
+          <input
+            id="contributeAmount"
+            type="text"
+            inputmode="numeric"
+            placeholder="100.000"
+            required
+          >
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="contributeAccount">Ambil Dana dari Dompet</label>
+        <select id="contributeAccount">
+          <option value="cash">Tunai (Cash)</option>
+          <option value="bank">Rekening Bank</option>
+          <option value="ewallet">E-Wallet</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="contributeDate">Tanggal</label>
+        <input type="date" id="contributeDate" required>
+      </div>
+
+      <div class="dialog-actions">
+        <button class="secondary-button" type="button" data-close-dialog="contributeDialog">Batal</button>
+        <button class="primary-button" type="submit">Konfirmasi Nabung</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="app-dialog utility-dialog" id="utilityDialog">
+    <div class="dialog-form">
+      <div class="dialog-header">
+        <div><p class="section-label">FINANCIAL TOOLKIT</p><h2>Utility Center</h2></div>
+        <button class="dialog-close" type="button" data-close-dialog="utilityDialog" aria-label="Tutup">×</button>
+      </div>
+      <div class="utility-tabs" role="tablist" aria-label="Utility">
+        <button type="button" class="utility-tab active" data-utility-tab="split">Split Bill</button>
+        <button type="button" class="utility-tab" data-utility-tab="currency">Currency</button>
+        <button type="button" class="utility-tab" data-utility-tab="impulse">Bisa Beli?</button>
+      </div>
+      <section class="utility-pane active" id="utilitySplitPane">
+        <div class="form-group"><label for="splitTotal">Total tagihan (Rp)</label><input id="splitTotal" type="number" min="0" placeholder="250000"></div>
+        <div class="utility-two-cols">
+          <div class="form-group"><label for="splitPeople">Jumlah orang</label><input id="splitPeople" type="number" min="1" max="100" value="2"></div>
+          <div class="form-group"><label for="splitExtra">Pajak + service (%)</label><input id="splitExtra" type="number" min="0" max="100" step="0.1" value="0"></div>
+        </div>
+        <div class="utility-result"><span>Per orang</span><strong id="splitResult">Rp0</strong></div>
+        <button class="primary-button utility-record-button" id="splitRecordButton" type="button">Catat ke Form</button>
+      </section>
+      <section class="utility-pane" id="utilityCurrencyPane" hidden>
+        <div class="form-group"><label for="currencyAmount">Nominal mata uang asing</label><input id="currencyAmount" type="number" min="0" value="1"></div>
+        <div class="form-group"><label for="currencyCode">Mata uang</label><select id="currencyCode"><option value="USD">USD — US Dollar</option><option value="JPY">JPY — Japanese Yen</option><option value="SGD">SGD — Singapore Dollar</option><option value="EUR">EUR — Euro</option></select></div>
+        <div class="utility-result"><span>Estimasi dalam Rupiah</span><strong id="currencyResult">Rp0</strong></div>
+        <p class="field-hint">Kurs perkiraan untuk simulasi, bukan kurs real-time.</p>
+        <button class="primary-button utility-record-button" id="currencyRecordButton" type="button">Catat ke Form</button>
+      </section>
+      <section class="utility-pane" id="utilityImpulsePane" hidden>
+        <div class="form-group"><label for="impulseItem">Nama barang</label><input id="impulseItem" type="text" maxlength="70" placeholder="Contoh: Headphone"></div>
+        <div class="form-group"><label for="impulsePrice">Harga barang (Rp)</label><input id="impulsePrice" type="number" min="0" placeholder="500000"></div>
+        <div class="utility-result"><span>Status keputusan</span><strong id="impulseStatus">Masukkan harga barang</strong></div>
+        <p class="field-hint" id="impulseExplanation">Akan dibandingkan dengan Safe-to-Spend dan sisa anggaran bulanan.</p>
+      </section>
+    </div>
+  </dialog>
+
+  <dialog class="app-dialog pin-dialog" id="pinDialog">
+    <form class="dialog-form" id="pinForm">
+      <div class="dialog-header">
+        <div><p class="section-label">LOCAL ACCESS CONTROL</p><h2 id="pinDialogTitle">Atur PIN Lock</h2></div>
+        <button class="dialog-close" type="button" data-close-dialog="pinDialog" aria-label="Tutup">×</button>
+      </div>
+      <p class="panel-subtitle">PIN 4 digit digunakan sebagai pengunci tampilan di browser ini. Ini bukan enkripsi data.</p>
+      <div class="form-group"><label for="pinInput">PIN baru (4 digit)</label><input id="pinInput" type="password" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" autocomplete="new-password" placeholder="••••"></div>
+      <div class="form-group"><label for="pinConfirm">Konfirmasi PIN</label><input id="pinConfirm" type="password" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" autocomplete="new-password" placeholder="••••"></div>
+      <div class="dialog-actions">
+        <button class="secondary-button" type="button" id="removePinButton">Nonaktifkan PIN</button>
+        <button class="primary-button" type="submit">Simpan PIN</button>
+      </div>
+    </form>
+  </dialog>
+
+  <section class="pin-lock-screen" id="pinLockScreen" hidden aria-label="Layar pengunci">
+    <div class="pin-lock-card">
+      <span class="brand-icon">A</span>
+      <p class="section-label">ALDRICH VAULT</p>
+      <h2>Vault terkunci</h2>
+      <p>Masukkan PIN untuk membuka dashboard.</p>
+      <form id="unlockForm">
+        <input id="unlockPin" type="password" inputmode="numeric" maxlength="4" autocomplete="current-password" placeholder="••••" aria-label="PIN 4 digit" required>
+        <button class="primary-button" type="submit">Buka Vault</button>
+        <p class="pin-error" id="pinError" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
+  <div class="app-toast" id="appToast" role="status" aria-live="polite"></div>
+  <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js')
+        .then(() => console.log('ALDRICH VAULT PWA Aktif!'))
+        .catch((err) => console.log('PWA gagal:', err));
+    });
+  }
+</script>
+</body>
+</html>
