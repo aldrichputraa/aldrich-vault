@@ -6,10 +6,10 @@
   <meta name="description" content="ALDRICH VAULT — Personal Financial Command Center.">
   <meta name="theme-color" content="#FAF7F2">
   <title>ALDRICH VAULT — Personal Financial Command Center</title>
-  <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#FF6B00">
-<link rel="apple-touch-icon" href="https://flaticon.com">
 
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" type="image/svg+xml" href="/icon.svg">
+  <link rel="apple-touch-icon" href="/icon.svg">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -655,15 +655,15 @@
       </form>
     </div>
   </section>
+
   <div class="app-toast" id="appToast" role="status" aria-live="polite"></div>
+
   <script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./sw.js')
-        .then(() => console.log('ALDRICH VAULT PWA Aktif!'))
-        .catch((err) => console.log('PWA gagal:', err));
-    });
-  }
-</script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js');
+      });
+    }
+  </script>
 </body>
 </html>
